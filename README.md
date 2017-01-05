@@ -3,7 +3,7 @@
 Only configuration for mail server
 
 ## What is uploaded and what I do?
-There are uploaded directory structure and files for ubuntu server correct postfix configuration. Copy and paste this directories and files to your servers.
+There are uploaded directory structure and files for ubuntu server correct postfix configuration. Copy and paste this directories and files to your server.
 
 ## Some ubuntu settings
 Add user fot vhosts directory:
