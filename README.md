@@ -27,6 +27,9 @@ Other user rights:
 ## SQL Tables
 After make installation of postfix, dovecot and mysql and set correct connection to mysql server you need to add following tables.
 
+Users type of password is set to SHA and must be insert with following commnad:
+**INSERT INTO `virtual_users` (`id`, `domain_id`, `password` , `email`) VALUES ('1', '1', ENCRYPT('password123', CONCAT('$6$', SUBSTRING(SHA(RAND()), -16))), 'info@domain.com');**
+
 ```
 CREATE TABLE `virtual_aliases` (
   `id` int(11) NOT NULL,
