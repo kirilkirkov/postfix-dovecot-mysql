@@ -70,8 +70,8 @@ ALTER TABLE `virtual_users`
 
 ## Notes
 If you want to debug postfix uncomment in etc/postfix/main..
-#debug_peer_list=mail.razdavalnik.bg
-#debug_peer_level=3
+debug_peer_list=mail.razdavalnik.bg
+debug_peer_level=3
 -Check logs in /var/log/mail.log or /var/log/mail.err
 
 If you want to generate password for user from terminal
