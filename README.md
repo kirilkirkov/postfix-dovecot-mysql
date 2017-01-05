@@ -7,13 +7,13 @@ There are uploaded directory structure and files for ubuntu server correct postf
 
 ## Some ubuntu settings
 Add user fot vhosts directory:
-groupadd -g 5000 vmail
-useradd -g vmail -u 5000 vmail -d /var/mail
-chown -R vmail:vmail /var/mail
+- groupadd -g 5000 vmail
+- useradd -g vmail -u 5000 vmail -d /var/mail
+- chown -R vmail:vmail /var/mail
 
 Other user rights:
-chown -R vmail:dovecot /etc/dovecot
-chmod -R o-rwx /etc/dovecot
+- chown -R vmail:dovecot /etc/dovecot
+- chmod -R o-rwx /etc/dovecot
 
 ## SQL Tables
 After make installation of postfix, dovecot and mysql and set correct connection to mysql server you need to add following tables.
@@ -70,12 +70,12 @@ ALTER TABLE `virtual_users`
 
 ## Notes
 If you want to debug postfix uncomment in etc/postfix/main..
-debug_peer_list=mail.razdavalnik.bg
-debug_peer_level=3
--Check logs in /var/log/mail.log or /var/log/mail.err
+- debug_peer_list=mail.razdavalnik.bg
+- debug_peer_level=3
+- Check logs in /var/log/mail.log or /var/log/mail.err
 
-If you want to generate password for user from terminal
-doveadm pw -s SHA512-CRYPT
+If you want to generate password for user from terminal write this 
+- **doveadm pw -s SHA512-CRYPT**
 
 If you want to set new domain with email:
 - Set MX Recort of domain to point to your main.cf - myhostname (in this example mail.domain.com)
@@ -85,3 +85,5 @@ If you want to set new domain with email:
 - sudo service postfix restart
 
 If you want to add domain alias just add source of domain pointer domain_id to yours and destination can be what you want ;) (must not have virtual user if you add alias)!
+
+Add directory for every user in /var/mail/vhosts/domain.com/info/ ..
