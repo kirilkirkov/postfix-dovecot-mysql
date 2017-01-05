@@ -88,3 +88,14 @@ If you want to set new domain with email:
 If you want to add domain alias just add source of domain pointer domain_id to yours and destination can be what you want ;) (must not have virtual user if you add alias)!
 
 Add directory for every user in /var/mail/vhosts/domain.com/info/ ..
+
+
+## Add plugin for roundcube for password change ;)
+- Download the plugin: https://github.com/roundcube/roundcubemail/tree/master/plugins/password
+- In the config.inc.php add $config['plugins'] = array('password');
+- $config['db_dsnw'] = 'mysql://user:pass@localhost/roundcube (this must have it before but.. check it)
+- Go to plugins/password/ and add config.inc.php
+- To config[password_db_dsn] add mysql:// connection to postfix database
+- To config[password_query] add the query: 'UPDATE virtual_users SET password=ENCRYPT(%p, CONCAT(\'$6$\', SUBSTRING(SHA(RAND()), -16))) WHERE email=%u LIMIT 1' 
+
+If we have warning for password change.. go to logs in roundcube directory to check it.. maybe query is wrong..
