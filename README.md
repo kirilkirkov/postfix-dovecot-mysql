@@ -1,5 +1,5 @@
 # How to Setup Postfix Mail Server on Ubuntu 16.04 (Dovecot - MySQL)
-![alt text](link "Postfix Logo")
+![alt text](https://raw.githubusercontent.com/kirilkirkov/postfix-dovecot-mysql/master/postfix-logo.gif "Postfix Logo")
 Only configuration for mail server
 
 ## What is uploaded and what I do?
