@@ -3,6 +3,12 @@
 
 Only configuration for mail server
 
+## How to install this services
+- sudo apt-get install postfix postfix-mysql dovecot-core dovecot-imapd dovecot-lmtpd dovecot-mysql
+- Choose **Internet site**
+- Set domain for mail server
+- Note: Must have installed mysql before that. Find article on google how to install it
+
 ## What is uploaded and what I do?
 There are uploaded directory structure and files for ubuntu server correct postfix configuration. Copy and paste this directories and files to your server.
 
