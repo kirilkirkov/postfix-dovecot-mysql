@@ -110,3 +110,30 @@ Add directory for every user in /var/mail/vhosts/domain.com/info/ ..
 - To config[password_query] add the query: 'UPDATE virtual_users SET password=ENCRYPT(%p, CONCAT(\'$6$\', SUBSTRING(SHA(RAND()), -16))) WHERE email=%u LIMIT 1' 
 
 If we have warning for password change.. go to logs in roundcube directory to check it.. maybe query is wrong..
+
+## SPF Checking integration with python
+### Install the spf written on python:
+- sudo apt-get install postfix-policyd-spf-python
+
+### Enabling the Policy Service:
+In /etc/postfix/main.cf you will need to add the following line (it doesn't matter where, usually they get added to the end.
+
+- policy-spf_time_limit = 3600s
+
+### Add this section to /etc/postfix/master.cf for the Python script 
+
+```
+policy-spf  unix  -       n       n       -       -       spawn
+     user=nobody argv=/usr/bin/policyd-spf
+  ```
+Finally, you need to add the policy service to your smtpd_recipient_restrictions in file /etc/postfix/main.cf: 
+```
+smtpd_recipient_restrictions =
+     ...
+     permit_sasl_authenticated
+     permit_mynetworks
+     reject_unauth_destination
+     check_policy_service unix:private/policy-spf
+     ...
+     ```
+
