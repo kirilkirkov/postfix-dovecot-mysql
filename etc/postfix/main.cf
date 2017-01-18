@@ -73,3 +73,11 @@ inet_protocols = all
 
 # SPF
 policy-spf_time_limit = 3600s
+
+# DKIM
+milter_protocol = 2
+milter_default_action = accept
+smtpd_milters = unix:/spamass/spamass.sock, inet:localhost:12301
+non_smtpd_milters = unix:/spamass/spamass.sock, inet:localhost:12301
+smtpd_milters = inet:localhost:12301
+non_smtpd_milters = inet:localhost:12301
