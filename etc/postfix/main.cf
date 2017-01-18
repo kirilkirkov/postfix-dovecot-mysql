@@ -56,7 +56,8 @@ virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf
 # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
 # information on enabling SSL in the smtp client.
 
-smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination check_policy_service unix:private/policy-spf
+
 myhostname = mail.domain.com
 alias_maps = hash:/etc/aliases, nis:mail.aliases
 alias_database = hash:/etc/aliases
