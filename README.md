@@ -220,14 +220,14 @@ localhost
 sudo vim /etc/opendkim/KeyTable
 
 mail._domainkey.example.com example.com:mail:/etc/opendkim/keys/example.com/mail.private
-#mail._domainkey.example.net example.net:mail:/etc/opendkim/keys/example.net/mail.private
-#mail._domainkey.example.org example.org:mail:/etc/opendkim/keys/example.org/mail.private
+(#)mail._domainkey.example.net example.net:mail:/etc/opendkim/keys/example.net/mail.private
+(#)mail._domainkey.example.org example.org:mail:/etc/opendkim/keys/example.org/mail.private
 
 sudo vim /etc/opendkim/SigningTable
 
 *@example.com mail._domainkey.example.com
-#*@example.net mail._domainkey.example.net
-#*@example.org mail._domainkey.example.org
+(#)*@example.net mail._domainkey.example.net
+(#)*@example.org mail._domainkey.example.org
 
 cd /etc/opendkim/keys
 sudo mkdir example.com
