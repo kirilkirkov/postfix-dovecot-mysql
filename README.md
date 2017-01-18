@@ -136,4 +136,4 @@ smtpd_recipient_restrictions =
      check_policy_service unix:private/policy-spf
      ...
      ```
-
+### Add v=spf1 a mx -all to TXT Records of added domains to prevent spam
