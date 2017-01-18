@@ -138,3 +138,116 @@ smtpd_recipient_restrictions =
 ```
 
 Add **v=spf1 a mx -all** to TXT Records of email domains to prevent spam
+
+# Installation of DKIM
+## Among others, Google Gmail and Yahoo mail check your email for a DKIM signature!! (also spf)
+
+sudo apt-get install opendkim opendkim-tools
+
+sudo vim /etc/opendkim.conf
+
+Add this options
+
+```
+AutoRestart             Yes
+AutoRestartRate         10/1h
+UMask                   002
+Syslog                  yes
+SyslogSuccess           Yes
+LogWhy                  Yes
+
+Canonicalization        relaxed/simple
+
+ExternalIgnoreList      refile:/etc/opendkim/TrustedHosts
+InternalHosts           refile:/etc/opendkim/TrustedHosts
+KeyTable                refile:/etc/opendkim/KeyTable
+SigningTable            refile:/etc/opendkim/SigningTable
+
+Mode                    sv
+PidFile                 /var/run/opendkim/opendkim.pid
+SignatureAlgorithm      rsa-sha256
+
+UserID                  opendkim:opendkim
+
+Socket                  inet:12301@localhost
+```
+
+Explain the config:
+- AutoRestart: auto restart the filter on failures
+- AutoRestartRate: specifies the filter's maximum restart rate, if restarts begin to happen faster than this rate, the filter will terminate; 10/1h - 10 restarts/hour are allowed at most
+- UMask: gives all access permissions to the user group defined by UserID and allows other users to read and execute files, in this case it will allow the creation and modification of a Pid file.
+- Syslog, SyslogSuccess, *LogWhy: these parameters enable detailed logging via calls to syslog
+- Canonicalization: defines the canonicalization methods used at message signing, the simple method allows almost no modification while the relaxed one tolerates minor changes such as
+    whitespace replacement; relaxed/simple - the message header will be processed with the relaxed algorithm and the body with the simple one
+- ExternalIgnoreList: specifies the external hosts that can send mail through the server as one of the signing domains without credentials
+- InternalHosts: defines a list of internal hosts whose mail should not be verified but signed instead
+- KeyTable: maps key names to signing keys
+- SigningTable: lists the signatures to apply to a message based on the address found in the From: header field
+- Mode: declares operating modes; in this case the milter acts as a signer (s) and a verifier (v)
+- PidFile: the path to the Pid file which contains the process identification number
+- SignatureAlgorithm: selects the signing algorithm to use when creating signatures
+- UserID: the opendkim process runs under this user and group
+- Socket: the milter will listen on the socket specified here, Posfix will send messages to opendkim for signing and verification through this socket; 12301@localhost defines a TCP socket that listens on localhost, port 12301
+
+sudo vim /etc/default/opendkim
+Add this: SOCKET="inet:12301@localhost"
+
+sudo vim /etc/postfix/main.cf
+
+milter_protocol = 2
+milter_default_action = accept
+smtpd_milters = unix:/spamass/spamass.sock, inet:localhost:12301
+non_smtpd_milters = unix:/spamass/spamass.sock, inet:localhost:12301
+smtpd_milters = inet:localhost:12301
+non_smtpd_milters = inet:localhost:12301
+
+sudo mkdir /etc/opendkim
+sudo mkdir /etc/opendkim/keys
+
+sudo vim /etc/opendkim/TrustedHosts
+
+```
+127.0.0.1
+localhost
+192.168.0.1/24
+
+*.example.com
+
+#*.example.net
+#*.example.org
+```
+
+sudo vim /etc/opendkim/KeyTable
+
+mail._domainkey.example.com example.com:mail:/etc/opendkim/keys/example.com/mail.private
+#mail._domainkey.example.net example.net:mail:/etc/opendkim/keys/example.net/mail.private
+#mail._domainkey.example.org example.org:mail:/etc/opendkim/keys/example.org/mail.private
+
+sudo vim /etc/opendkim/SigningTable
+
+*@example.com mail._domainkey.example.com
+#*@example.net mail._domainkey.example.net
+#*@example.org mail._domainkey.example.org
+
+cd /etc/opendkim/keys
+sudo mkdir example.com
+cd example.com
+
+Generate the keys:
+sudo opendkim-genkey -s mail -d example.com
+
+Change the owner of the private key to opendkim:
+sudo chown opendkim:opendkim mail.private
+
+## Add the public key to the domain's DNS records
+sudo vim mail.txt
+
+The dns record must be like this:
+Name: mail._domainkey.example.com.
+
+Text: "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5N3lnvvrYgPCRSoqn+awTpE+iGYcKBPpo8HHbcFfCIIV10Hwo4PhCoGZSaKVHOjDm4yefKXhQjM7iKzEPuBatE7O47hAx1CJpNuIdLxhILSbEmbMxJrJAG0HZVn8z6EAoOHZNaPHmK2h4UUrjOG8zA5BHfzJf7tGwI+K619fFUwIDAQAB"
+
+sudo service postfix restart
+sudo service opendkim restart
+
+ENJOY Autherificated! ;)
