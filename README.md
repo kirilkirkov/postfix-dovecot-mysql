@@ -3,7 +3,7 @@
 ![alt text](https://raw.githubusercontent.com/kirilkirkov/postfix-dovecot-mysql/master/MySQL.svg.png "Postfix Logo")
 ![alt text](https://raw.githubusercontent.com/kirilkirkov/postfix-dovecot-mysql/master/dovecot_logo.png "Postfix Logo")
 
-Only configuration for mail server (+ SPF, DKIM and DMARC)
+Only configuration for mail server (+ SPF and DKIM authentication to prevent spam)
 
 ## How to install this services
 - sudo apt-get install postfix postfix-mysql dovecot-core dovecot-imapd dovecot-lmtpd dovecot-mysql
