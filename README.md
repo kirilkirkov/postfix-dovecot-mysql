@@ -3,7 +3,7 @@
 ![alt text](https://raw.githubusercontent.com/kirilkirkov/postfix-dovecot-mysql/master/MySQL.svg.png "Postfix Logo")
 ![alt text](https://raw.githubusercontent.com/kirilkirkov/postfix-dovecot-mysql/master/dovecot_logo.png "Postfix Logo")
 
-Only configuration for mail server
+Only configuration for mail server (+ SPF and DKIM)
 
 ## How to install this services
 - sudo apt-get install postfix postfix-mysql dovecot-core dovecot-imapd dovecot-lmtpd dovecot-mysql
@@ -137,4 +137,4 @@ smtpd_recipient_restrictions =
      ...
 ```
 
-### Add v=spf1 a mx -all to TXT Records of added domains to prevent spam
+Add **v=spf1 a mx -all** to TXT Records of email domains to prevent spam
